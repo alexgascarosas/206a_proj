@@ -130,15 +130,6 @@ low_pass_filter( alpha=0.70 )
 FollowJointTrajectory → /scaled_joint_trajectory_controller
 ```
 
-### Why IK instead of direct wrist control?
-
-Direct wrist control (original code) works, but:
-- Only wrist_1 and wrist_2 contribute to tilt; the other 4 joints are frozen
-- Large tilts at certain configurations can cause singularities
-- With IK, the solver distributes the tilt across all 6 joints, staying away from singular configurations and giving more tilt range
-
----
-
 ## Parameters reference
 
 All parameters live in `config/pid_params.yaml`.
