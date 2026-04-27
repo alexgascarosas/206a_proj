@@ -1,0 +1,57 @@
+# config/pid_params.yaml
+# All parameters for the BallBalanceController node.
+# Loaded by the launch file.  Override per-run with --ros-args -p name:=value.
+
+ball_balance_controller:
+  ros__parameters:
+
+    # ── URDF path ─────────────────────────────────────────────────────────────
+    # REQUIRED: absolute path to your UR7e URDF file.
+    # Tip: find it with  find /opt/ros -name "ur7e.urdf" 2>/dev/null
+    urdf_path: "/path/to/your/ur7e.urdf"
+
+    # ── Base (level) pose ─────────────────────────────────────────────────────
+    # Joint angles in radians for the flat/balanced plate pose.
+    # Order: shoulder_pan, shoulder_lift, elbow, wrist_1, wrist_2, wrist_3
+    base_joints: [0.5, -2.35, 2.65, -1.85, 1.57, 0.0]
+
+    # ── PID gains ─────────────────────────────────────────────────────────────
+    # Units: mm (position), mm/s (velocity) → radians (joint angle)
+    # Tune kp first, then kd.  Enable ki only after kp/kd are stable.
+    kp_x: 0.00120     # proportional gain, x-axis
+    kd_x: 0.00040     # derivative  gain, x-axis
+    ki_x: 0.00000     # integral    gain, x-axis  (0 = disabled)
+
+    kp_y: 0.00120     # proportional gain, y-axis
+    kd_y: 0.00040     # derivative  gain, y-axis
+    ki_y: 0.00000     # integral    gain, y-axis  (0 = disabled)
+
+    # ── Axis direction ────────────────────────────────────────────────────────
+    # Set to -1.0 if the ball moves away from centre after a command.
+    roll_sign:  1.0
+    pitch_sign: 1.0
+
+    # ── Safety limits ─────────────────────────────────────────────────────────
+    max_tilt_rad:        0.060   # max tilt per axis, radians (~3.4 deg)
+    max_joint_delta_rad: 0.150   # max joint change per control step, radians
+    edge_limit_x_mm:    60.0    # hard rescue threshold, X axis (mm)
+    edge_limit_y_mm:    60.0    # hard rescue threshold, Y axis (mm)
+    deadband_mm:         1.0    # position deadband, mm
+    integral_limit:     80.0    # integrator wind-up limit, mm·s
+    velocity_clip:     120.0    # velocity error clip, mm/s
+
+    # ── Timing and filtering ──────────────────────────────────────────────────
+    command_rate_hz:     10.0   # control loop rate, Hz
+    command_alpha:        0.70  # low-pass filter weight (higher = less filtering)
+    trajectory_time:      0.15  # trajectory duration sent to controller, s
+    return_to_base_rate:  0.25  # blend rate toward flat pose when ball lost
+    lookahead_s:          0.35  # future position lookahead (informational)
+
+    # ── Reference trajectory ──────────────────────────────────────────────────
+    # Only one should be true; if both false, controller holds centre (0,0).
+    track_circle:   true        # trace a circle
+    track_figure8:  false       # trace a figure-8
+
+    circle_radius_mm:  20.0    # radius of circle / figure-8, mm
+    circle_period_s:   20.0    # period of one full circle / figure-8, s
+    settle_time_s:      0.0    # wait this long before starting trajectory, s

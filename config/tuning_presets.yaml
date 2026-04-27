@@ -1,0 +1,57 @@
+# config/tuning_presets.yaml
+#
+# Copy the block you want into pid_params.yaml, or load directly with:
+#   ros2 launch ball_balance_controller balance.launch.py params_file:=config/tuning_presets.yaml
+#
+# Preset guide
+# ─────────────────────────────────────────────────────────────────────────────
+#   conservative  – safe for first run; slow to correct but won't oscillate
+#   aggressive    – faster response; may oscillate if plate/ball dynamics vary
+#   hold_centre   – no tracking, just balance at (0,0)
+#   circle_slow   – circle reference, large radius, slow period
+#   circle_fast   – circle reference, small radius, fast period
+# ─────────────────────────────────────────────────────────────────────────────
+
+presets:
+
+  conservative:
+    kp_x: 0.00080
+    kd_x: 0.00020
+    ki_x: 0.00000
+    kp_y: 0.00080
+    kd_y: 0.00020
+    ki_y: 0.00000
+    command_alpha: 0.50
+    max_tilt_rad:  0.040
+
+  aggressive:
+    kp_x: 0.00160
+    kd_x: 0.00060
+    ki_x: 0.00001
+    kp_y: 0.00160
+    kd_y: 0.00060
+    ki_y: 0.00001
+    command_alpha: 0.85
+    max_tilt_rad:  0.060
+
+  hold_centre:
+    track_circle:  false
+    track_figure8: false
+    kp_x: 0.00120
+    kd_x: 0.00040
+    ki_x: 0.00000
+    kp_y: 0.00120
+    kd_y: 0.00040
+    ki_y: 0.00000
+
+  circle_slow:
+    track_circle:      true
+    track_figure8:     false
+    circle_radius_mm:  30.0
+    circle_period_s:   30.0
+
+  circle_fast:
+    track_circle:      true
+    track_figure8:     false
+    circle_radius_mm:  15.0
+    circle_period_s:   10.0
